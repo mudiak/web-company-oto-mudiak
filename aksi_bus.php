@@ -55,6 +55,9 @@ if($page=='list' & $aksi=='add'){
     mysqli_query($conn,"delete from busdetails where id_bus='$id'");
     header('location:index.php?page=list');
 
+}elseif($page=='tiket' & $aksi=='cektiket'){
+    header('location:index.php?page=pemesanan&kode='.$_POST['tiket']);
+    
 }
 
 ?>

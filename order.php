@@ -4,56 +4,91 @@ include 'koneksi.php';
 $page=$_GET['page'];
 $aksi =isset($_GET['aksi']) ? $_GET['aksi'] : 'list';
 if($page=='pemesanan' && $aksi=='list'){
+
 ?>
 		
        
 		<div class="content">
-			<a href="?page=list&aksi=add" class="btn btn-primary ">Tambah Jadwal Bus</a>
-            
-            <hr>
 
+            <h2>Pemesanan Tiket</h2>
+            <hr>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Scan Barcode</button>
+<hr>
         <div class="card">
 
 			<div class="card-header bg-success text-white ">
 			</div>
 			<div class="card-body">
             <div class="table-responsive">
-            <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered " id="" width="100%" cellspacing="0">
     
 						<tr>
+                        <th>Kode Pesanan</th>
+                        <th>Nama Customer</th>
                         <th>Kode Bus</th>
                         <th>Plat Nomor Bus</th>
+                        <th>Seat</th>
                       <th>Tanggal </th>
-                      <th>Waktu Keberangkatan</th>
+                      <th width="75">Waktu Keberangkatan</th>
                       <th>Waktu Sampai</th>
                       <th>Asal</th>
                       <th>Tujuan</th>
                       <th>Harga</th>
-                      <th>Aksi</th>
 						</tr>
 				
 					<tbody>
 					</tbody>
 
                     <?php
-                    $sql = mysqli_query($conn,"select * from busdetails where id_busagency= 'B01'");
+                    if(isset($_GET['kode'])){
+                        $list= explode('#', $_GET['kode']);
+                        
+                        $sql = mysqli_query($conn,"SELECT orders.idorder as kodepesanan,
+                        customers.name as name, 
+                        orders.id_bus as kodebus, 
+                        busdetails.plat as plat, 
+                        busdetails.tgl as tgl, 
+                        busdetails.time as berangkat, 
+                        busdetails.time_finish as sampai, 
+                        busdetails.start_address as asal, 
+                        busdetails.destination_address as tujuan, 
+                        orders.total_price as harga, 
+                        orders.seat_number as seat 
+                        FROM orders,customers,busdetails
+                         WHERE orders.id_customer = customers.id_customer
+                          AND orders.id_bus = busdetails.id_bus and orders.idorder = '$list[0]'");
+                    }else{
+                        $sql = mysqli_query($conn,"SELECT orders.idorder as kodepesanan,
+                        customers.name as name, 
+                        orders.id_bus as kodebus, 
+                        busdetails.plat as plat, 
+                        busdetails.tgl as tgl, 
+                        busdetails.time as berangkat, 
+                        busdetails.time_finish as sampai, 
+                        busdetails.start_address as asal, 
+                        busdetails.destination_address as tujuan, 
+                        orders.total_price as harga, 
+                        orders.seat_number as seat 
+                        FROM orders,customers,busdetails
+                         WHERE orders.id_customer = customers.id_customer
+                          AND orders.id_bus = busdetails.id_bus");
+                    }
+                    
                         while($data = mysqli_fetch_array($sql)){
 
                   ?>
                       <tr>
-                      <td><?=$data['id_bus']?></td>
+                      <td><?=$data['kodepesanan']?></td>
+                      <td><?=$data['name']?></td>
+                      <td><?=$data['kodebus']?></td>
                       <td><?=$data['plat']?></td>
+                      <td><?=$data['seat']?></td>
                       <td><?=$data['tgl']?></td>
-                      <td><?=$data['time']?></td>
-                      <td><?=$data['time_finish']?></td>
-                      <td><?=$data['start_address']?></td>
-                      <td><?=$data['destination_address']?></td>
-                      <td><?="Rp. ".number_format($data['price'],0,',','.')?></td>
-                      <td>
-                      <a href="?page=list&aksi=edit&id=<?=$data['id_bus']?>" class="text-info"><i class="fas fa-edit"></i></a>|
-                      <a href="aksi_bus.php?page=list&aksi=delete&id=<?=$data['id_bus']?>" class="text-danger" onclick="return confirm('Yakin akan menghapus data? ')"><i class="fas fa-trash "></i></a>
-                      
-                      </td>
+                      <td><?=$data['berangkat']?></td>
+                      <td><?=$data['sampai']?></td>
+                      <td><?=$data['asal']?></td>
+                      <td><?=$data['tujuan']?></td>
+                      <td><?="Rp. ".number_format($data['harga'],0,',','.')?></td>
                       </tr>
 
                       <?php
@@ -165,6 +200,8 @@ $databus = mysqli_fetch_array($sql);
 
  </form>
 </div>
+
+
 <?php
 }
 ?>

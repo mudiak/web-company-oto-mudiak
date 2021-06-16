@@ -27,6 +27,10 @@
   <script type="text/javascript" src="vendor/rupiah.js"></script>
   <script src="vendor/ckeditor/ckeditor/ckeditor.js"></script>
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
   <style>
  .clickable{
   border:0px solid #ccc;
@@ -249,7 +253,97 @@ oFReader.onload = function (oFREvent)
 });
 </script>
 </div>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <button type="button" name="close" class="close" data-dismiss="modal">&times;</button>
+      
+        <!-- <h4 class="modal-title">Modal Header</h4> -->
+      </div>
+      <div class="modal-body">
+        <p>Scanner Ticket Customer.</p>
+        <div class="row">
+      <div class="col-md-6">
+                    <video id="preview" width="100%"></video>
+      </div>
+
+      <?php
+      if($_GET['page'] == 'pemesanan')
+      {
+      ?>
+        <script>
+           let scanner = new Instascan.Scanner({ video: document.getElementById('preview')});
+           Instascan.Camera.getCameras().then(function(cameras){
+               if(cameras.length > 0 ){
+                   scanner.start(cameras[0]);
+               } else{
+                   alert('No cameras found');
+               }
+
+           }).catch(function(e) {
+               console.error(e);
+           });
+
+           scanner.addListener('scan',function(c){
+               document.getElementById('text').value=c;
+           });
+
+        </script>
+
+        <?php
+      }
+        ?>
+        <div class="col-md-6">
+        <form action="aksi_bus.php?page=tiket&aksi=cektiket" method="post">
+         <label>SCAN QR CODE</label>
+         <input type="text" name="tiket" id="text" readonyy="" placeholder="scan qrcode" class="form-control">
+         <br>
+         <input type="submit" name="cek" class="btn btn-primary" value="Cek Ticket">
+         </form>
+
+         
+
+        </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 </body>
+<script>
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+           let scanner = new Instascan.Scanner({ video: document.getElementById('previewtopup')});
+           Instascan.Camera.getCameras().then(function(cameras){
+               if(cameras.length > 0 ){
+                   scanner.start(cameras[0]);
+               } else{
+                   alert('No cameras found');
+               }
+
+           }).catch(function(e) {
+               console.error(e);
+           });
+
+           scanner.addListener('scan',function(c){
+            var myarr = c.split("#");
+              var topup = numberWithCommas(myarr[2]);
+               document.getElementById('topup').value=topup;
+               document.getElementById('topupinput').value=myarr[2];
+               document.getElementById('namatopup').value=myarr[0];
+               document.getElementById('usernametopup').value=myarr[1];
+           });
+
+        </script>
 
 </html>
 
