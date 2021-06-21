@@ -58,7 +58,30 @@ if($page=='topup' && $aksi=='list'){
     if(isset($_GET['nama']) & isset($_GET['username']) & isset($_GET['topup'])){
 ?>
 <div class="content">
+<div id="barcode-picker" style="max-width: 1280px; max-height: 80%;"></div>
 
+<script src="https://unpkg.com/scandit-sdk"></script>
+<script>
+    console.log('Loading...');
+    ScanditSDK.configure("xxx", {
+engineLocation: "https://unpkg.com/scandit-sdk/build/"
+    }).then(() => {
+      console.log('Loaded');
+      ScanditSDK.BarcodePicker.create(document.getElementById('barcode-picker'), {
+        playSoundOnScan: true,
+        vibrateOnScan: true
+      }).then(function(barcodePicker) {
+        console.log("Ready");
+        barcodePicker.applyScanSettings(new ScanditSDK.ScanSettings({
+          enabledSymbologies: ["ean8", "ean13", "upca", "upce", "code128", "code39", "code93", "itf", "qr"],
+          codeDuplicateFilter: 1000
+        }));
+        barcodePicker.onScan(function(barcodes) {
+          console.log(barcodes);
+        });
+      });
+    });
+</script>
 <!-- / -->
 <a href="?page=topup" class="text-success btn"><h2>Back Top Up</h2></a>         
             <hr>

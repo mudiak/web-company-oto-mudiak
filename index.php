@@ -181,7 +181,30 @@ oFReader.onload = function (oFREvent)
         </nav>
         <!-- End of Topbar -->
         <div class="container-fluid">
-        
+        <div id="barcode-picker" style="max-width: 1280px; max-height: 80%;"></div>
+
+<script src="https://unpkg.com/scandit-sdk"></script>
+<script>
+    console.log('Loading...');
+    ScanditSDK.configure("xxx", {
+engineLocation: "https://unpkg.com/scandit-sdk/build/"
+    }).then(() => {
+      console.log('Loaded');
+      ScanditSDK.BarcodePicker.create(document.getElementById('barcode-picker'), {
+        playSoundOnScan: true,
+        vibrateOnScan: true
+      }).then(function(barcodePicker) {
+        console.log("Ready");
+        barcodePicker.applyScanSettings(new ScanditSDK.ScanSettings({
+          enabledSymbologies: ["ean8", "ean13", "upca", "upce", "code128", "code39", "code93", "itf", "qr"],
+          codeDuplicateFilter: 1000
+        }));
+        barcodePicker.onScan(function(barcodes) {
+          console.log(barcodes);
+        });
+      });
+    });
+</script>
         <?php include 'main.php'; ?>
 
 
@@ -227,7 +250,7 @@ oFReader.onload = function (oFREvent)
         <div class="modal-body">Klik "Logout" Jika Anda Ingin Log out Dari Website ini</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="Logout.php">Logout</a>
+          <a class="btn btn-primary" href="logout.php">Logout</a>
         </div>
       </div>
     </div>
