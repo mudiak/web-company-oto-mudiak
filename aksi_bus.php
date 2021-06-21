@@ -58,6 +58,38 @@ if($page=='list' & $aksi=='add'){
 }elseif($page=='tiket' & $aksi=='cektiket'){
     header('location:index.php?page=pemesanan&kode='.$_POST['tiket']);
     
+}elseif($page=='topup' & $aksi=='topup'){
+    $username = $_POST['username'];
+    $walletinput = $_POST['wallet'];
+    $nama = $_POST['nama'];
+
+    $sqawal = mysqli_query($conn,"select emoney from busagency where id_busagency='$_COOKIE[idagency]'");
+
+    $dataawal = mysqli_fetch_array($sqawal);
+    $emoney = (int)$dataawal['emoney'];
+
+    
+
+if($emoney < $walletinput){
+    header('location:index.php?page=topup&aksi=gagal');  
+
+}else{
+    $sqlambilwallet = mysqli_query($conn,"select * from customers where id_customer='$username'");
+    $datawallet = mysqli_fetch_array($sqlambilwallet);
+    $wallet = $datawallet['wallet'];
+    $totalwallet = $wallet + $walletinput;
+    mysqli_query($conn,"UPDATE `customers` 
+    SET `wallet` = '$totalwallet' 
+    WHERE `customers`.`id_customer` = '$username';");
+    $totalemoney = $emoney - $walletinput;
+
+   mysqli_query($conn,"UPDATE `busagency` SET `emoney` ='$totalemoney' 
+   WHERE `busagency`.`id_busagency` = '$_COOKIE[idagency]'");
+
+
+    header('location:index.php?page=topup&aksi=success&nama='.$nama.'&username='.$username.'&topup='.$walletinput);  
+}
+   
 }
 
 ?>

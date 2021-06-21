@@ -36,7 +36,7 @@ if($page=='list' && $aksi=='list'){
 					</tbody>
 
                     <?php
-                    $sql = mysqli_query($conn,"select * from busdetails where id_busagency= 'B01'");
+                    $sql = mysqli_query($conn,"select * from busdetails where id_busagency= '$_COOKIE[idagency]'");
                         while($data = mysqli_fetch_array($sql)){
 
                   ?>

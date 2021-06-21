@@ -45,10 +45,10 @@ if(isset($_COOKIE['islogin'])) {
                   </div>
                   <form class="user" method="POST">
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="username" name="username" aria-describedby="Usernamehelp" placeholder="Enter Your Username">
+                      <input type="email" class="form-control form-control-user" id="email" name="email" aria-describedby="Usernamehelp" placeholder="Enter Your Email" required>
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
+                      <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password" required>
                     </div>
                    
                     <input type="submit" value="Login" name="login" class="btn btn-primary btn-user btn-block">
@@ -86,16 +86,16 @@ if(isset($_COOKIE['islogin'])) {
 include 'koneksi.php';
 
 if (isset($_POST['login'])) {
-  $uname=(isset($_POST['username'])? $_POST['username']:'');
+  $uname=(isset($_POST['email'])? $_POST['email']:'');
   $ps=(isset($_POST['password'])? $_POST['password']:'');
   $pswd=md5($ps);
-  $q=mysqli_query($koneksi,"SELECT * FROM busagency WHERE username='$uname' AND password='$pswd'");
+  $q=mysqli_query($conn,"SELECT * FROM busagency WHERE email_agency='$uname' AND password='$pswd'");
   $cek=mysqli_fetch_array($q);
   if ($cek) {
-    setcookie('user', $cek['username'], time()+(3600 * 24));
-    setcookie('nama', $cek['nama_operator'], time()+(3600 * 24));
+    setcookie('idagency', $cek['id_busagency'], time()+(3600 * 24));
+    setcookie('nama', $cek['name_agency'], time()+(3600 * 24));
     setcookie('islogin', true, time()+(3600 * 24));
-    setcookie('profil', 'assets/operator/'.$cek['profil'], time()+(3600 * 24));
+    // setcookie('profil', 'assets/operator/'.$cek['profil'], time()+(3600 * 24));
     header("location:index.php");
     // echo "<script>top.location='index.php'</script>";
   } else {

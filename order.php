@@ -71,7 +71,7 @@ if($page=='pemesanan' && $aksi=='list'){
                         orders.seat_number as seat 
                         FROM orders,customers,busdetails
                          WHERE orders.id_customer = customers.id_customer
-                          AND orders.id_bus = busdetails.id_bus");
+                          AND orders.id_bus = busdetails.id_bus AND orders.id_bus LIKE '$_COOKIE[idagency]%'");
                     }
                     
                         while($data = mysqli_fetch_array($sql)){

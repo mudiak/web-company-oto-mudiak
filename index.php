@@ -1,7 +1,7 @@
 <?php 
-// if (!isset($_COOKIE['islogin'])) {
-//   header("location:login.php");
-// } else{
+if (!isset($_COOKIE['islogin'])) {
+  header("location:login.php");
+} else{
 
   $page=isset($_GET['page'])?$_GET['page']:'home';
 ?>
@@ -141,22 +141,19 @@ oFReader.onload = function (oFREvent)
          
           <div class="topbar-divider d-none d-sm-block"></div>
           
-          <p><strong>PT Sinamar</strong></p>
+          <p><strong>PT <?=$_COOKIE['nama']?></strong></p>
           
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
           
           <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_COOKIE['nama'] ?></span>
-                <img class="img-profile rounded-circle" src="<?=$_COOKIE['profil']?>">
+                <!-- <span class="mr-2 d-none d-lg-inline text-gray-600 small"></span> -->
+                <!-- <img class="img-profile rounded-circle" src=""> -->Log Out
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="?page=profil">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>
+               
                
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
@@ -184,6 +181,7 @@ oFReader.onload = function (oFREvent)
         </nav>
         <!-- End of Topbar -->
         <div class="container-fluid">
+        
         <?php include 'main.php'; ?>
 
 
@@ -237,6 +235,8 @@ oFReader.onload = function (oFREvent)
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -275,7 +275,7 @@ oFReader.onload = function (oFREvent)
       if($_GET['page'] == 'pemesanan')
       {
       ?>
-        <script>
+        <script type="text/javascript">
            let scanner = new Instascan.Scanner({ video: document.getElementById('preview')});
            Instascan.Camera.getCameras().then(function(cameras){
                if(cameras.length > 0 ){
@@ -339,8 +339,8 @@ function numberWithCommas(x) {
               var topup = numberWithCommas(myarr[2]);
                document.getElementById('topup').value=topup;
                document.getElementById('topupinput').value=myarr[2];
-               document.getElementById('namatopup').value=myarr[0];
-               document.getElementById('usernametopup').value=myarr[1];
+               document.getElementById('namatopup').value=myarr[1];
+               document.getElementById('usernametopup').value=myarr[0];
            });
 
         </script>
@@ -378,5 +378,5 @@ function numberWithCommas(x) {
 //   }
 //   return $namaBln;
 // }
-// }
+}
 ?>
